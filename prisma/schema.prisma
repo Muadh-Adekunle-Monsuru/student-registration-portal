@@ -15,25 +15,30 @@ datasource db {
 
 model Student {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String   @unique
-  firstName   String?
-  lastName    String?
-  email       String?
-  CGPA        String?
-  supervisor  String?
-  supervisees String[]
+  address     String
+  firstName   String
+  lastName    String
+  email       String
+  semester    String
+  middleName  String
+  matricNo    String
+  phone       String
+  dateOfBirth DateTime
+  gender      String
+  city        String
+  state       String
+  program     String
   createdAt   DateTime @default(now())
-  Courses     Courses? @relation(fields: [coursesId], references: [id])
-  coursesId   String?  @db.ObjectId
+  courses     String[]
 }
 
 model Courses {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String    @unique
+  title String    
   code        String?
-  description String?
-  credits     Int?
+  credits     String?
   semester    String?
-  students    Student[]
+  department String?
+  students    String[]
   createdAt   DateTime  @default(now())
 }

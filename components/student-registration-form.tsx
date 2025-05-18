@@ -109,18 +109,23 @@ export function StudentRegistrationForm() {
 			firstName: '',
 			middleName: '',
 			lastName: '',
+			matricNo: '',
 			email: '',
 			phone: '',
 			address: '',
 			city: '',
 			state: '',
+			program: '',
+			semester: '',
+			gender: '',
 		},
 	});
 
 	async function onSubmit(data: StudentFormValues) {
 		setIsSubmitting(true);
 		try {
-			await registerStudent(data);
+			const formatedData = { ...data, createdAt: new Date(), courses: [''] };
+			await registerStudent(formatedData);
 			toast({
 				title: 'Registration Successful',
 				description: 'Student has been registered successfully.',

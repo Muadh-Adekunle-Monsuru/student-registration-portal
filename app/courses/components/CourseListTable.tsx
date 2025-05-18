@@ -48,22 +48,11 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
-import { Student } from '@prisma/client';
+import { Courses } from '@prisma/client';
+import { deleteCourse } from '@/lib/actions';
+import { toast } from '@/hooks/use-toast';
 
-// Sample data
-
-// export type Student = {
-//   id: string
-//   firstName: string
-//   lastName: string
-//   email: string
-//   program: string
-//   semester: string
-//   registrationDate: string
-//   status: "Active" | "Inactive" | "Pending"
-// }
-
-export function StudentsTable({ students: data }: { students: Student[] }) {
+export function CourseListTable({ courses: data }: { courses: Courses[] }) {
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[]
@@ -72,83 +61,85 @@ export function StudentsTable({ students: data }: { students: Student[] }) {
 		React.useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = React.useState({});
 
-	const columns: ColumnDef<Student>[] = [
+	const columns: ColumnDef<Courses>[] = [
 		{
-			accessorKey: 'matricNo',
-			header: 'ID',
-			cell: ({ row }) => (
-				<div className='font-medium'>{row.getValue('matricNo')}</div>
-			),
-		},
-		{
-			accessorKey: 'firstName',
+			accessorKey: 'title',
 			header: ({ column }) => {
 				return (
 					<Button
 						variant='ghost'
 						onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
 					>
-						First Name
+						Course Title
 						<ArrowUpDown className='ml-2 h-4 w-4' />
 					</Button>
 				);
 			},
 		},
 		{
-			accessorKey: 'lastName',
+			accessorKey: 'code',
 			header: ({ column }) => {
 				return (
 					<Button
 						variant='ghost'
 						onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
 					>
-						Last Name
+						Course Code
 						<ArrowUpDown className='ml-2 h-4 w-4' />
 					</Button>
 				);
 			},
 		},
 		{
-			accessorKey: 'email',
-			header: 'Email',
-		},
-		{
-			accessorKey: 'program',
-			header: 'Program',
+			accessorKey: 'credits',
+			header: 'Credits',
 		},
 		{
 			accessorKey: 'semester',
 			header: 'Semester',
 		},
-		// {
-		// 	id: 'actions',
-		// 	cell: ({ row }) => {
-		// 		const student = row.original;
+		{
+			accessorKey: 'department',
+			header: 'Department',
+		},
+		{
+			accessorKey: 'students',
+			header: 'Number of Students',
+			cell: ({ row }) => (
+				<div className='font-medium'>{row.getValue('students')}</div>
+			),
+		},
+		{
+			id: 'actions',
+			cell: ({ row }) => {
+				const course = row.original;
 
-		// 		return (
-		// 			<DropdownMenu>
-		// 				<DropdownMenuTrigger asChild>
-		// 					<Button variant='ghost' className='h-8 w-8 p-0'>
-		// 						<span className='sr-only'>Open menu</span>
-		// 						<MoreHorizontal className='h-4 w-4' />
-		// 					</Button>
-		// 				</DropdownMenuTrigger>
-		// 				<DropdownMenuContent align='end'>
-		// 					<DropdownMenuLabel>Actions</DropdownMenuLabel>
-		// 					<DropdownMenuItem
-		// 						onClick={() => navigator.clipboard.writeText(student.id)}
-		// 					>
-		// 						Copy student ID
-		// 					</DropdownMenuItem>
-		// 					<DropdownMenuSeparator />
-		// 					<DropdownMenuItem>View student details</DropdownMenuItem>
-		// 					<DropdownMenuItem>Edit student</DropdownMenuItem>
-		// 					<DropdownMenuItem>Change status</DropdownMenuItem>
-		// 				</DropdownMenuContent>
-		// 			</DropdownMenu>
-		// 		);
-		// 	},
-		// },
+				return (
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant='ghost' className='h-8 w-8 p-0'>
+								<span className='sr-only'>Open menu</span>
+								<MoreHorizontal className='h-4 w-4' />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align='end'>
+							<DropdownMenuItem
+								onClick={async () => {
+									await deleteCourse(course.id);
+									toast({
+										title: 'Course deleted successfully',
+									});
+								}}
+							>
+								Delete Course
+							</DropdownMenuItem>
+							<DropdownMenuItem>Edit student</DropdownMenuItem>
+							<DropdownMenuItem>Change status</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				);
+			},
+		},
 	];
 
 	const table = useReactTable({
@@ -175,29 +166,21 @@ export function StudentsTable({ students: data }: { students: Student[] }) {
 			<CardHeader>
 				<div className='flex items-center justify-between'>
 					<div>
-						<CardTitle>Students</CardTitle>
-						<CardDescription>
-							Manage student records and information.
-						</CardDescription>
+						<CardTitle>Courses List</CardTitle>
 					</div>
-					<Button asChild>
-						<Link href='/registration'>
-							<Plus className='mr-2 h-4 w-4' /> Add Student
-						</Link>
-					</Button>
 				</div>
 			</CardHeader>
 			<CardContent>
-				<div className='flex items-center py-4'>
+				<div className='flex items-center py-2'>
 					<div className='relative max-w-sm'>
 						<Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
 						<Input
-							placeholder='Search students...'
+							placeholder='Search courses...'
 							value={
-								(table.getColumn('firstName')?.getFilterValue() as string) ?? ''
+								(table.getColumn('title')?.getFilterValue() as string) ?? ''
 							}
 							onChange={(event) =>
-								table.getColumn('firstName')?.setFilterValue(event.target.value)
+								table.getColumn('title')?.setFilterValue(event.target.value)
 							}
 							className='max-w-sm pl-8'
 						/>

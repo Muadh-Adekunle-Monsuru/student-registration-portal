@@ -1,16 +1,7 @@
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { BarChart3, GraduationCap, School, Users } from 'lucide-react';
-import TotalStudents from './components/TotalStudents';
 import NewRegistrations from './components/NewRegistrations';
 import TotalCourses from './components/TotalCourses';
+import TotalStudents from './components/TotalStudents';
 
 export default function DashboardPage() {
 	return (
