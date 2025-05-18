@@ -40,6 +40,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
+import { registerStudent } from '@/lib/actions';
 
 const studentFormSchema = z.object({
 	firstName: z.string().min(2, {
@@ -83,7 +84,7 @@ const studentFormSchema = z.object({
 	}),
 });
 
-type StudentFormValues = z.infer<typeof studentFormSchema>;
+export type StudentFormValues = z.infer<typeof studentFormSchema>;
 
 // This simulates saving to a database
 async function saveStudent(data: StudentFormValues) {
@@ -119,7 +120,7 @@ export function StudentRegistrationForm() {
 	async function onSubmit(data: StudentFormValues) {
 		setIsSubmitting(true);
 		try {
-			await saveStudent(data);
+			await registerStudent(data);
 			toast({
 				title: 'Registration Successful',
 				description: 'Student has been registered successfully.',
