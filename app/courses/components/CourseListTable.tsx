@@ -51,8 +51,10 @@ import Link from 'next/link';
 import { Courses } from '@prisma/client';
 import { deleteCourse } from '@/lib/actions';
 import { toast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 export function CourseListTable({ courses: data }: { courses: Courses[] }) {
+	const router = useRouter();
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[]

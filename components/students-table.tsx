@@ -49,22 +49,13 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 import { Student } from '@prisma/client';
-
-// Sample data
-
-// export type Student = {
-//   id: string
-//   firstName: string
-//   lastName: string
-//   email: string
-//   program: string
-//   semester: string
-//   registrationDate: string
-//   status: "Active" | "Inactive" | "Pending"
-// }
+import { deleteStudent } from '@/lib/actions';
+import { toast } from './ui/use-toast';
+import { useRouter } from 'next/navigation';
 
 export function StudentsTable({ students: data }: { students: Student[] }) {
 	const [sorting, setSorting] = React.useState<SortingState>([]);
+	const router = useRouter();
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[]
 	);
@@ -120,35 +111,44 @@ export function StudentsTable({ students: data }: { students: Student[] }) {
 			accessorKey: 'semester',
 			header: 'Semester',
 		},
-		// {
-		// 	id: 'actions',
-		// 	cell: ({ row }) => {
-		// 		const student = row.original;
+		{
+			id: 'actions',
+			cell: ({ row }) => {
+				const student = row.original;
 
-		// 		return (
-		// 			<DropdownMenu>
-		// 				<DropdownMenuTrigger asChild>
-		// 					<Button variant='ghost' className='h-8 w-8 p-0'>
-		// 						<span className='sr-only'>Open menu</span>
-		// 						<MoreHorizontal className='h-4 w-4' />
-		// 					</Button>
-		// 				</DropdownMenuTrigger>
-		// 				<DropdownMenuContent align='end'>
-		// 					<DropdownMenuLabel>Actions</DropdownMenuLabel>
-		// 					<DropdownMenuItem
-		// 						onClick={() => navigator.clipboard.writeText(student.id)}
-		// 					>
-		// 						Copy student ID
-		// 					</DropdownMenuItem>
-		// 					<DropdownMenuSeparator />
-		// 					<DropdownMenuItem>View student details</DropdownMenuItem>
-		// 					<DropdownMenuItem>Edit student</DropdownMenuItem>
-		// 					<DropdownMenuItem>Change status</DropdownMenuItem>
-		// 				</DropdownMenuContent>
-		// 			</DropdownMenu>
-		// 		);
-		// 	},
-		// },
+				return (
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant='ghost' className='h-8 w-8 p-0'>
+								<span className='sr-only'>Open menu</span>
+								<MoreHorizontal className='h-4 w-4' />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align='end'>
+							<DropdownMenuItem
+								onClick={() => {
+									router.push(`/student/${student.id}`);
+								}}
+							>
+								View full details
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={async () => {
+									await deleteStudent(student.id);
+									toast({
+										title: 'Student deleted successfully',
+									});
+								}}
+							>
+								Delete Student
+							</DropdownMenuItem>
+							<DropdownMenuItem>Edit student</DropdownMenuItem>
+							<DropdownMenuItem>Change status</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				);
+			},
+		},
 	];
 
 	const table = useReactTable({

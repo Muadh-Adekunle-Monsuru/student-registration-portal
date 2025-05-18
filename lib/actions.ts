@@ -29,3 +29,21 @@ export async function deleteCourse(id: string) {
 	});
 	return res;
 }
+
+export async function deleteStudent(id: string) {
+	const res = await prisma.student.delete({
+		where: {
+			id,
+		},
+	});
+	return res;
+}
+
+export async function getStudentById(id: string) {
+	const res = await prisma.student.findUnique({
+		where: {
+			id,
+		},
+	});
+	return res;
+}
