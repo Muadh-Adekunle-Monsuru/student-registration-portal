@@ -17,3 +17,5 @@ export default function StudentsPage() {
 		</div>
 	);
 }
+
+export const dynamic = 'force-dynamic';
