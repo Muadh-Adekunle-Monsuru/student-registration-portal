@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
@@ -20,15 +19,21 @@ import {
 	Plus,
 	Search,
 } from 'lucide-react';
+import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
@@ -40,18 +45,11 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
-import Link from 'next/link';
-import { Student } from '@prisma/client';
 import { deleteStudent } from '@/lib/actions';
-import { toast } from './ui/use-toast';
+import { Student } from '@prisma/client';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { toast } from './ui/use-toast';
 
 export function StudentsTable({ students: data }: { students: Student[] }) {
 	const [sorting, setSorting] = React.useState<SortingState>([]);
