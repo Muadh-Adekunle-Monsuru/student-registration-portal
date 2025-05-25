@@ -30,19 +30,8 @@ export function StudentProfile({ student }: StudentProfileProps) {
 
 	return (
 		<div className='space-y-6'>
-			<div className='flex items-center gap-2'>
-				<Button variant='outline' size='icon' asChild>
-					<Link href='/students'>
-						<ArrowLeft className='h-4 w-4' />
-						<span className='sr-only'>Back to students</span>
-					</Link>
-				</Button>
-				<h1 className='text-2xl font-bold tracking-tight'>Student Profile</h1>
-			</div>
-
-			<div className='grid gap-6 md:grid-cols-7'>
-				{/* Left column - Student info */}
-				<div className='md:col-span-2 space-y-6'>
+			<div className='grid gap-4 md:grid-cols-8 w-full'>
+				<div className='md:col-span-3 space-y-6'>
 					<Card>
 						<CardHeader className='flex flex-row items-center gap-4 space-y-0'>
 							<Avatar className='h-16 w-16'>
@@ -95,8 +84,8 @@ export function StudentProfile({ student }: StudentProfileProps) {
 							</div>
 						</CardContent>
 						<CardFooter>
-							<Button variant='outline' className='w-full' disabled>
-								<Link href={`/students/${student.id}/edit`}>
+							<Button variant='outline' className='w-full'>
+								<Link href={`/student/${student.id}/edit`}>
 									<Edit className='mr-2 h-4 w-4' />
 									Edit Profile
 								</Link>
@@ -105,7 +94,6 @@ export function StudentProfile({ student }: StudentProfileProps) {
 					</Card>
 				</div>
 
-				{/* Right column - Tabs content */}
 				<div className='md:col-span-5'>
 					<Card>
 						<CardHeader>

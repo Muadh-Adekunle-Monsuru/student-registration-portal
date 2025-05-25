@@ -135,8 +135,6 @@ export function CourseListTable({ courses: data }: { courses: Courses[] }) {
 							>
 								Delete Course
 							</DropdownMenuItem>
-							<DropdownMenuItem>Edit student</DropdownMenuItem>
-							<DropdownMenuItem>Change status</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				);

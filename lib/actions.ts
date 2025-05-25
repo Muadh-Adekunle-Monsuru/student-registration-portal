@@ -21,6 +21,18 @@ export async function createCourse(values: any) {
 	return res;
 }
 
+export async function updateStudent(id: string, values: any) {
+	const res = await prisma.student.update({
+		where: {
+			id,
+		},
+		data: {
+			...values,
+		},
+	});
+	return res;
+}
+
 export async function deleteCourse(id: string) {
 	const res = await prisma.courses.delete({
 		where: {

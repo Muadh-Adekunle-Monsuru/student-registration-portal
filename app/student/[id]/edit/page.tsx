@@ -1,6 +1,5 @@
-import { notFound } from 'next/navigation';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { StudentProfile } from './components/StudentProfile';
+import { EditStudentRegistrationForm } from '../components/EditStudentRegistrationForm';
 import { getStudentById } from '@/lib/actions';
 
 interface StudentProps {
@@ -22,28 +21,18 @@ interface StudentProps {
 	courses: string[];
 }
 
-export default async function StudentPage({
-	params,
-}: {
-	params: { id: string };
-}) {
-	const param = await params.id;
-	const student: StudentProps | null = await getStudentById(param);
-
-	if (!student) {
-		notFound();
-	}
-
+export default async function EditPage({ params }: { params: { id: string } }) {
+	const student: StudentProps | null = await getStudentById(params.id);
 	return (
 		<div className='flex flex-col min-h-screen'>
 			<header className='border-b'>
 				<div className='flex h-16 items-center px-4 gap-4'>
 					<SidebarTrigger />
-					<h1 className='text-xl font-semibold'>Student Profile</h1>
+					<h1 className='text-xl font-semibold'>Edit Student Information</h1>
 				</div>
 			</header>
 			<div className='flex-1 p-4 md:p-8'>
-				<StudentProfile student={student} />
+				<EditStudentRegistrationForm student={student} />
 			</div>
 		</div>
 	);

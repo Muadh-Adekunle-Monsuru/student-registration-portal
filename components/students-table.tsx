@@ -140,8 +140,13 @@ export function StudentsTable({ students: data }: { students: Student[] }) {
 							>
 								Delete Student
 							</DropdownMenuItem>
-							<DropdownMenuItem>Edit student</DropdownMenuItem>
-							<DropdownMenuItem>Change status</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									router.push(`/student/${student.id}/edit`);
+								}}
+							>
+								Edit student
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				);

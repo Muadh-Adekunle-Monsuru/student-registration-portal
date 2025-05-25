@@ -32,7 +32,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
-import { registerStudent } from '@/lib/actions';
+import { registerStudent, updateStudent } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
 
 const studentFormSchema = z.object({
@@ -79,26 +79,26 @@ const studentFormSchema = z.object({
 
 export type StudentFormValues = z.infer<typeof studentFormSchema>;
 
-export function StudentRegistrationForm() {
+export function EditStudentRegistrationForm({ student }: { student: any }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const router = useRouter();
 
 	const form = useForm<StudentFormValues>({
 		resolver: zodResolver(studentFormSchema),
 		defaultValues: {
-			firstName: '',
-			middleName: '',
-			lastName: '',
-			matricNo: '',
-			email: '',
-			phone: '',
-			address: '',
-			city: '',
-			state: '',
-			program: '',
-			semester: '',
-			gender: '',
-			dateOfBirth: undefined,
+			firstName: student.firstName,
+			middleName: student.middleName,
+			lastName: student.lastName,
+			matricNo: student.matricNo,
+			email: student.email,
+			phone: student.phone,
+			address: student.address,
+			city: student.city,
+			state: student.state,
+			program: student.program,
+			semester: student.semester,
+			gender: student.gender,
+			dateOfBirth: student.dateOfBirth,
 		},
 	});
 
@@ -106,14 +106,12 @@ export function StudentRegistrationForm() {
 		setIsSubmitting(true);
 		try {
 			const formatedData = { ...data, createdAt: new Date(), courses: [''] };
-			await registerStudent(formatedData);
+			await updateStudent(student.id, formatedData);
 			toast({
-				title: 'Registration Successful',
-				description: 'Student has been registered successfully.',
+				title: 'Update Successful',
+				description: 'Student has been updated successfully.',
 			});
-			form.reset();
 			router.refresh();
-			form.resetField('program');
 		} catch (error) {
 			toast({
 				title: 'Registration Failed',
@@ -128,7 +126,7 @@ export function StudentRegistrationForm() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Student Registration Form</CardTitle>
+				<CardTitle>Edit Student Information</CardTitle>
 				<CardDescription>
 					Enter student details to register them in the system.
 				</CardDescription>
@@ -395,7 +393,7 @@ export function StudentRegistrationForm() {
 									{isSubmitting && (
 										<Loader2 className='mr-2 h-4 w-4 animate-spin' />
 									)}
-									Register Student
+									Update Student
 								</Button>
 							</div>
 						</form>
