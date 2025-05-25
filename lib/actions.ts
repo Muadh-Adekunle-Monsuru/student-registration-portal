@@ -59,3 +59,43 @@ export async function getStudentById(id: string) {
 	});
 	return res;
 }
+
+export async function addCourse(courseId: string, studentId: string) {
+	const student = await prisma.student.findUnique({
+		where: {
+			id: studentId,
+		},
+	});
+
+	const res = await prisma.student.update({
+		where: {
+			id: studentId,
+		},
+		data: {
+			courses: [...(student?.courses || []), courseId],
+		},
+	});
+	return res;
+}
+
+export async function dropCourse(courseId: string, studentId: string) {
+	const student = await prisma.student.findUnique({
+		where: {
+			id: studentId,
+		},
+	});
+
+	const updatedCourses = (student?.courses || []).filter(
+		(id) => id !== courseId
+	);
+
+	const res = await prisma.student.update({
+		where: {
+			id: studentId,
+		},
+		data: {
+			courses: updatedCourses,
+		},
+	});
+	return res;
+}

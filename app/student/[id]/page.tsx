@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { StudentProfile } from './components/StudentProfile';
 import { getStudentById } from '@/lib/actions';
+import { prisma } from '@/lib/client';
 
 interface StudentProps {
 	id: string;
@@ -27,9 +28,9 @@ export default async function StudentPage({
 }: {
 	params: { id: string };
 }) {
-	const param = await params.id;
-	const student: StudentProps | null = await getStudentById(param);
-
+	const { id } = await params;
+	const student: StudentProps | null = await getStudentById(id);
+	const courses = await prisma.courses.findMany();
 	if (!student) {
 		notFound();
 	}
@@ -43,7 +44,7 @@ export default async function StudentPage({
 				</div>
 			</header>
 			<div className='flex-1 p-4 md:p-8'>
-				<StudentProfile student={student} />
+				<StudentProfile student={student} courses={courses} />
 			</div>
 		</div>
 	);

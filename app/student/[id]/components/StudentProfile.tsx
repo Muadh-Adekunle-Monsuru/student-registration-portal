@@ -11,18 +11,18 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Student } from '@prisma/client';
+import { Courses, Student } from '@prisma/client';
 import { ArrowLeft, Calendar, Edit, Mail, MapPin, User } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import CoursePick from './CoursePick';
 
 interface StudentProfileProps {
 	student: Student;
+	courses: Courses[];
 }
 
-export function StudentProfile({ student }: StudentProfileProps) {
-	const [activeTab, setActiveTab] = useState('overview');
-
+export function StudentProfile({ student, courses }: StudentProfileProps) {
 	// Get student initials for avatar
 	const initials = `${student.firstName.charAt(0)}${student.lastName.charAt(
 		0
@@ -85,9 +85,12 @@ export function StudentProfile({ student }: StudentProfileProps) {
 						</CardContent>
 						<CardFooter>
 							<Button variant='outline' className='w-full'>
-								<Link href={`/student/${student.id}/edit`}>
+								<Link
+									href={`/student/${student.id}/edit`}
+									className='flex gap-1 items-center'
+								>
 									<Edit className='mr-2 h-4 w-4' />
-									Edit Profile
+									<span>Edit Profile</span>
 								</Link>
 							</Button>
 						</CardFooter>
@@ -95,12 +98,7 @@ export function StudentProfile({ student }: StudentProfileProps) {
 				</div>
 
 				<div className='md:col-span-5'>
-					<Card>
-						<CardHeader>
-							<CardTitle>Student Course Form</CardTitle>
-						</CardHeader>
-						<CardContent></CardContent>
-					</Card>
+					<CoursePick student={student} courses={courses} />
 				</div>
 			</div>
 		</div>
